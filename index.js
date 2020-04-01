@@ -1,11 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const routes = require('./routes');
+const bodyParser = require('body-parser');
 
-//create server
+//crear server
 const app = express();
 
 
-//Conect to MongoDb
+//Conectar a MongoDb
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/gamer_zone', {
     useNewUrlParser: true,
@@ -13,6 +15,13 @@ mongoose.connect('mongodb://localhost/gamer_zone', {
     useFindAndModify: false
 });
 
+
+//Habilitar el body-parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+//Habilitar rutas
+app.use('/', routes())
 
 app.listen(3000, function() {
     console.log('Server Started');

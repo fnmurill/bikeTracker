@@ -4,7 +4,7 @@
     "description": "Backend en MongoDB, Node y Express",
     "main": "index.js",
     "scripts": {
-        "dev": "echo \"Error: no test specified\" && exit 1"
+        "dev": "nodemon ./index.js"
     },
     "author": "Fabio Nicolás Murillo",
     "license": "ISC",
