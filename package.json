@@ -1,13 +1,21 @@
 {
-    "name": "gamer-zone",
+    "name": "bike-tracker",
     "version": "1.0.0",
-    "description": "Backend en MongoDB, Node y Express",
+    "description": "Backed in MongoDB, Node.js and Express",
     "main": "index.js",
     "scripts": {
         "dev": "nodemon ./index.js"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/fnmurill/Gamerzone.git"
+    },
     "author": "Fabio Nicolás Murillo",
     "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/fnmurill/Gamerzone/issues"
+    },
+    "homepage": "https://github.com/fnmurill/Gamerzone#readme",
     "dependencies": {
         "express": "^4.17.1",
         "mongoose": "^5.9.7"

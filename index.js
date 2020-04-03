@@ -23,6 +23,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //Habilitar rutas
 app.use('/', routes())
 
+
+// Definir puerto y arrancar el servidor
 app.listen(3000, function() {
     console.log('Server Started');
 });

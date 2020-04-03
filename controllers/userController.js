@@ -16,3 +16,15 @@ exports.newUser = async(req, res, next) => {
     }
 
 }
+
+/** Obtiene todos los usuarios */
+
+exports.getUsers = async(req, res, next) => {
+    try {
+        const user = await user.find({});
+        res.json(user);
+    } catch (error) {
+        console.log(error);
+        next();
+    }
+}

@@ -4,23 +4,36 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     lastName: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
-    sex: {
+    idDocument: {
         type: String,
         required: true
     },
-    age: {
+    idNumber: {
         type: Number,
         required: true
     },
-    timePlayed: {
-        type: Number,
+    birthDate: {
+        type: Date,
+        default: Date.now,
         required: true
+    },
+    homeAddress: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    city: {
+        type: String,
+        required: true,
+        trim: true
     },
 
 
