@@ -1,4 +1,4 @@
-const Bicycle = require('../models/bicycle');
+const Bicycle = require('../models/Bicycle');
 
 //cuando se crea una nueva bicicleta
 exports.newBicycle = async(req, res, next) => {

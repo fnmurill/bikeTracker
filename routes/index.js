@@ -11,9 +11,24 @@ module.exports = function() {
         userController.newUser
     );
 
-    // Obtiene todos los registros de usuarios en la BD
+    // Obtener todos los de usuarios en la BD
     router.get('/users',
         userController.getUsers
+    );
+
+    // Obtener el usuarios solicitado por ID de la BD
+    router.get('/users/:id',
+        userController.getUser
+    );
+
+    // Actualizar el usuarios solicitado por ID de la BD
+    router.put('/users/:id',
+        userController.updateUser
+    );
+
+    // Elminar el usuarios solicitado por ID de la BD
+    router.delete('/users/:id',
+        userController.deleteUser
     );
 
 
