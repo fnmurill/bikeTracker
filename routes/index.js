@@ -7,8 +7,13 @@ const bicycleController = require('../controllers/bicycleController');
 module.exports = function() {
 
     // Agregar nuevos usuarios via POST
-    router.post('/users',
+    router.post('/users/newuser',
         userController.newUser
+    );
+
+    // Iniciar Sesión 
+    router.post('/users/login',
+        userController.loginUser
     );
 
     // Obtener todos los de usuarios en la BD

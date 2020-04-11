@@ -5,7 +5,11 @@ const User = require('../models/Users');
 exports.newUser = async(req, res, next) => {
 
     // Crear objeto de Usuario con datos de req.body
-    const user = new User(req.body);
+    const user = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password
+    });
 
     try {
         await user.save();
@@ -15,6 +19,34 @@ exports.newUser = async(req, res, next) => {
         next();
     }
 }
+
+/**Ruta login */
+
+// exports.loginUser = async(req,res,next) =>{
+//     try {
+//         const user = await User.findOne({ email: req.params.email }, req.body);
+//         res.json(user);
+//     } catch (error) {
+//         console.log(error, 'Logged');
+//         next();
+//     };
+// }
+exports.loginUser = (req, res) => {
+    //comprobamos que el correo exista
+    User.findOne({ 'email': req.body.email }, (err, user) => {
+        if (!user) res.json({ message: 'Login failed, user not found' })
+            // Si el email existe, entonces comparará la contraseña
+        user.comparePassword(req.body.password, (err, isMatch) => {
+            if (err) throw err;
+            if (!isMatch) return res.status(400).json({
+                message: 'Wrong Password'
+            });
+            res.status(200).send('Logged in successfully')
+        });
+
+    });
+
+};
 
 /** Obtiene todos los usuarios */
 
@@ -49,11 +81,10 @@ exports.updateUser = async(req, res, next) => {
     } catch (error) {
         console.log(error);
         next();
-    }
-}
+    };
+};
 
-
-/* Eliminar un paciente por su ID*/
+/* Eliminar un usuario por su ID*/
 exports.deleteUser = async(req, res, next) => {
     try {
         await User.findOneAndDelete({ _id: req.params.id });
