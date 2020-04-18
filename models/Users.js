@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const uniqueValidator = require('mongoose-unique-validator')
+const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 
 const validRoles = {
@@ -18,7 +18,8 @@ const userSchema = new Schema({
         required: false
     },
     idNumber: {
-        type: Number,
+        type: String,
+        unique: 1,
         required: false
     },
     birthDate: {
@@ -89,7 +90,7 @@ userSchema.methods.comparePassword = function(candidatePassword, checkPassword) 
     });
 };
 
-//Validamos que el solo exista el correo una vez en Base de Datos
+//Validamos que el correo sea unico en la Base de Datos
 userSchema.plugin(uniqueValidator, {
     message: '{PATH} must be unique'
 });

@@ -21,26 +21,46 @@ module.exports = function() {
         userController.getUsers
     );
 
-    // Obtener el usuarios solicitado por ID de la BD
-    router.get('/users/:id',
+    // Obtener el usuario solicitado por el idNumber de la BD
+    router.get('/users/:idNumber',
         userController.getUser
     );
 
-    // Actualizar el usuarios solicitado por ID de la BD
-    router.put('/users/:id',
+    // Actualizar el usuario solicitado por idNumber de la BD
+    router.put('/users/:idNumber',
         userController.updateUser
     );
 
-    // Elminar el usuarios solicitado por ID de la BD
-    router.delete('/users/:id',
+    // Elminar el usuario solicitado por idNumber de la BD
+    router.delete('/users/:idNumber',
         userController.deleteUser
     );
 
 
 
     // Agregar nuevas bicicletas via POST
-    router.post('/bicycle',
+    router.post('/bicycle/newbicycle',
         bicycleController.newBicycle
+    );
+
+    // Obtener todas las bicicletas registradas en la BD
+    router.get('/bicycle',
+        bicycleController.getBicycles
+    );
+
+    // Obtener la Bicicleta por Serial
+    router.get('/bicycle/:serialNumber',
+        bicycleController.getBicycle
+    );
+
+    // Actualizar la Bicicleta solicitada por Serial de la BD
+    router.put('/bicycle/:serialNumber',
+        bicycleController.updateBicycle
+    );
+
+    // Elminar la Bicicleta solicitada por Serial de la BD
+    router.delete('/bicycle/:serialNumber',
+        bicycleController.deleteBicycle
     );
 
     return router;

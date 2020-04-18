@@ -7,6 +7,7 @@ exports.newUser = async(req, res, next) => {
     // Crear objeto de Usuario con datos de req.body
     const user = new User({
         name: req.body.name,
+        idNumber: req.body.idNumber,
         email: req.body.email,
         password: req.body.password
     });
@@ -17,20 +18,10 @@ exports.newUser = async(req, res, next) => {
     } catch (error) {
         console.log(error);
         next();
-    }
-}
+    };
+};
 
 /**Ruta login */
-
-// exports.loginUser = async(req,res,next) =>{
-//     try {
-//         const user = await User.findOne({ email: req.params.email }, req.body);
-//         res.json(user);
-//     } catch (error) {
-//         console.log(error, 'Logged');
-//         next();
-//     };
-// }
 exports.loginUser = (req, res) => {
     //comprobamos que el correo exista
     User.findOne({ 'email': req.body.email }, (err, user) => {
@@ -57,24 +48,13 @@ exports.getUsers = async(req, res, next) => {
     } catch (error) {
         console.log(error);
         next();
-    }
-}
+    };
+};
 
-/* Obtiene un Usuario en especifico por su ID*/
+// /* Obtiene un Usuario en especifico por su idNumber*/
 exports.getUser = async(req, res, next) => {
     try {
-        const user = await User.findById(req.params.id);
-        res.json(user);
-    } catch (error) {
-        console.log(error);
-        next();
-    }
-}
-
-/** Actualizar un Usuario por su ID */
-exports.updateUser = async(req, res, next) => {
-    try {
-        const user = await User.findOneAndUpdate({ _id: req.params.id }, req.body, {
+        const user = await User.findOne({ idNumber: req.params.idNumber }, req.body, {
             new: true
         });
         res.json(user);
@@ -84,13 +64,26 @@ exports.updateUser = async(req, res, next) => {
     };
 };
 
-/* Eliminar un usuario por su ID*/
+/** Actualizar un Usuario por su idNumber */
+exports.updateUser = async(req, res, next) => {
+    try {
+        const user = await User.findOneAndUpdate({ idNumber: req.params.idNumber }, req.body, {
+            new: true
+        });
+        res.json(user);
+    } catch (error) {
+        console.log(error);
+        next();
+    };
+};
+
+/* Eliminar un usuario por su isNumber*/
 exports.deleteUser = async(req, res, next) => {
     try {
-        await User.findOneAndDelete({ _id: req.params.id });
+        await User.findOneAndDelete({ idNumber: req.params.idNumber });
         res.json({ message: 'User deleted correctly' });
     } catch (error) {
         console.log(error);
         next();
-    }
-}
+    };
+};

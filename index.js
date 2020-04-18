@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //Conectar a MongoDb
 mongoose.Promise = global.Promise;
-const urlMongo = 'mongodb://localhost/gamer_zone';
+const urlMongo = 'mongodb://localhost/bike_tracker';
 process.env.URLDB = urlMongo;
 mongoose.connect(process.env.URLDB, {
     useNewUrlParser: true,
