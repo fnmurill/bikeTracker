@@ -1,14 +1,16 @@
 {
-    "name": "bike-tracker",
-    "version": "1.0.0",
-    "description": "Backed in MongoDB, Node.js and Express",
+    "name": "bike-register",
+    "version": "2.0.1",
+    "description": "API desarrollada en Node.js, Express con Base de Datos en MongoDB",
     "main": "index.js",
     "scripts": {
-        "dev": "nodemon ./index.js"
+        "dev": "nodemon server/server.js",
+        "start": "node server/server.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/fnmurill/bikeTracker.git"
+        "url": "git+https://github.com/fnmurill/bikeTracker.git"
     },
     "author": "Fabio Nicolás Murillo",
     "license": "ISC",
@@ -18,11 +20,14 @@
     "homepage": "https://github.com/fnmurill/bikeTracker#readme",
     "dependencies": {
         "bcrypt": "^4.0.1",
+        "body-parser": "^1.19.0",
         "express": "^4.17.1",
-        "mongoose": "^5.9.7",
-        "mongoose-unique-validator": "^2.0.3"
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^5.9.12",
+        "mongoose-unique-validator": "^2.0.3",
+        "underscore": "^1.10.2"
     },
     "devDependencies": {
-        "nodemon": "^2.0.2"
+        "nodemon": "^2.0.3"
     }
 }

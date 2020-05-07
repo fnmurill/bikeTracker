@@ -10,8 +10,7 @@ const validRoles = {
 const userSchema = new Schema({
     name: {
         type: String,
-        required: true,
-        trim: true
+        required: [true, 'El nombre es Necesario'],
     },
     idDocument: {
         type: String,
@@ -19,7 +18,7 @@ const userSchema = new Schema({
     },
     idNumber: {
         type: String,
-        unique: 1,
+        //     //unique: true,
         required: false
     },
     birthDate: {
@@ -29,9 +28,8 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
-        unique: 1,
-        required: true,
-        trim: true
+        unique: true,
+        required: [true, 'El email es Necesario']
     },
     homeAddress: {
         type: String,
@@ -49,50 +47,41 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,
-        minlength: 6,
+        required: [true, 'La contraseña es Necesario'],
+        //minlength: 6,
+    },
+    img: {
+        type: String,
+        required: false
     },
     role: {
         type: String,
         default: 'USER',
-        required: true,
         enum: validRoles,
+    },
+    status: {
+        type: Boolean,
+        default: true,
+    },
+    google: {
+        type: Boolean,
+        default: false,
     },
 });
 
-const bcrypt = require('bcrypt');
-const SALT = 10;
-//encripta la contraseña antes guardarla en la base de datos
-userSchema.pre('save', function(next) {
-    var user = this;
+//Para que al regresar el usuario registrado no regrese la contraseña
+userSchema.methods.toJSON = function() {
+    const user = this;
+    let userObject = user.toObject();
+    delete userObject.password;
 
-    if (user.isModified('password')) {
-        bcrypt.genSalt(SALT, function(err, salt) {
-            if (err) return next(err);
-
-            bcrypt.hash(user.password, salt, function(err, hash) {
-                if (err) return next(err);
-                user.password = hash;
-                next();
-            })
-        })
-    } else {
-        next();
-    };
-});
-
-//Comparo las contraseñas
-userSchema.methods.comparePassword = function(candidatePassword, checkPassword) {
-
-    bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-        if (err) return checkPassword(err)
-        checkPassword(null, isMatch)
-    });
+    return userObject;
 };
 
 //Validamos que el correo sea unico en la Base de Datos
 userSchema.plugin(uniqueValidator, {
     message: '{PATH} must be unique'
 });
+
 
 module.exports = mongoose.model('User', userSchema);
