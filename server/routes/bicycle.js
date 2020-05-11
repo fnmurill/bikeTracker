@@ -1,23 +1,31 @@
 const express = require('express');
 const _ = require('underscore');
 const Bicycle = require('../models/bicycle');
+const { checkToken, checkAdminRole } = require('../middlewares/authentication');
 
 const app = express();
 
 /*Registramos una Bicicleta */
-app.post('/bicycle/newbicycle', function(req, res) {
+app.post('/bicycle/newbicycle', checkToken, function(req, res) {
 
-    const body = req.body;
+    let body = req.body;
 
     const bicycle = new Bicycle({
         manufacturer: body.manufacturer,
         serialNumber: body.serialNumber,
         color: body.color,
-        typeBicycle: body.typeBicycle
+        typeBicycle: body.typeBicycle,
+        user: [req.user.name, req.user.email] //agrego el nombre y el correo del usuario que registro la bicicleta tomando los datos del payload del token
     });
 
     bicycle.save((err, bicycleDB) => {
         if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+        if (!bicycleDB) {
             return res.status(400).json({
                 ok: false,
                 err
@@ -32,7 +40,7 @@ app.post('/bicycle/newbicycle', function(req, res) {
 });
 
 /**Obtenemos todas las Bicicletas registradas con paginación*/
-app.get('/bicycle', function(req, res) {
+app.get('/bicycle', [checkToken, checkAdminRole], function(req, res) {
 
     let since = req.query.since || 0;
     since = Number(since);
@@ -108,7 +116,7 @@ app.put('/bicycle/:serialNumber', function(req, res) {
 });
 
 /**Eliminamos (Cambiamos de estado) una Bicicleta por su Serial */
-app.delete('/bicycle/:serialNumber', function(req, res) {
+app.delete('/bicycle/:serialNumber', [checkToken, checkAdminRole], function(req, res) {
 
     const serialNumber = req.params.serialNumber;
     const changeStatus = {

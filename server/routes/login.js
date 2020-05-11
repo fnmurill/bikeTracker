@@ -35,13 +35,13 @@ app.post('/login', (req, res) => {
 
         let token = jwt.sign({
             user: userDB
-        }, 'este-es-el-seed-de-desarrollo', { expiresIn: 60 * 60 * 24 * 30 })
+        }, process.env.SEED, { expiresIn: process.env.EXPIRY_TOKEN });
 
         res.json({
             ok: true,
             user: userDB,
             token
-        })
+        });
     });
 
 });

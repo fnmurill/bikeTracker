@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 const User = require('../models/user');
+const { checkToken, checkAdminRole } = require('../middlewares/authentication');
 
 const app = express();
 
@@ -9,7 +10,7 @@ const app = express();
 /**Registramos un Usuario */
 app.post('/user/newuser', function(req, res) {
 
-    const body = req.body;
+    let body = req.body;
 
     const user = new User({
         name: body.name,
@@ -35,7 +36,7 @@ app.post('/user/newuser', function(req, res) {
 });
 
 /**Obtenemos todos los Usuarios registrados con paginación*/
-app.get('/user', function(req, res) {
+app.get('/user', [checkToken, checkAdminRole], function(req, res) {
 
     let since = req.query.since || 0;
     since = Number(since);
@@ -70,7 +71,7 @@ app.get('/user', function(req, res) {
 app.get('/user/:email', function(req, res) {
 
     const email = req.params.email;
-    const body = req.body
+    let body = req.body
 
     User.findOne({ email }, body, { new: true }, (err, userDB) => {
         if (err) {
@@ -94,7 +95,7 @@ app.get('/user/:email', function(req, res) {
 app.put('/user/:email', function(req, res) {
 
     const email = req.params.email;
-    const body = _.pick(req.body, ['name', 'email', 'img', 'role', 'homeAddress', 'city', 'phoneNumber', 'password', 'status']); //"pick" regresa una copia del objeto filtrando solo los valores que necesito (quiero)
+    let body = _.pick(req.body, ['name', 'email', 'img', 'role', 'homeAddress', 'city', 'phoneNumber', 'password', 'status']); //"pick" regresa una copia del objeto filtrando solo los valores que necesito (quiero)
 
     User.findOneAndUpdate({ email }, body, { new: true, runValidators: true }, (err, userDB) => {
         if (err) {

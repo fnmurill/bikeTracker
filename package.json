@@ -10,14 +10,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/fnmurill/bikeTracker.git"
+        "url": "https://github.com/fnmurill/bike-register.git"
     },
     "author": "Fabio Nicolás Murillo",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/fnmurill/bikeTracker/issues"
+        "url": "https://github.com/fnmurill/bike-register/issues"
     },
-    "homepage": "https://github.com/fnmurill/bikeTracker#readme",
+    "homepage": "https://github.com/fnmurill/bike-register#readme",
     "dependencies": {
         "bcrypt": "^4.0.1",
         "body-parser": "^1.19.0",

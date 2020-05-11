@@ -28,6 +28,10 @@ const bicycleSchema = new Schema({
         type: String,
         required: false
     },
+    user: {
+        type: Schema.Types.Mixed,
+        ref: 'User'
+    },
 });
 
 //Validamos que el No. Serie sea único en la Base de Datos
