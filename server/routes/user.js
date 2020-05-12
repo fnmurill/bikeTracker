@@ -8,7 +8,7 @@ const app = express();
 
 
 /**Registramos un Usuario */
-app.post('/user/newuser', function(req, res) {
+app.post('/register', function(req, res) {
 
     let body = req.body;
 
