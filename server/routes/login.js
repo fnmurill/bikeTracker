@@ -13,9 +13,7 @@ app.post('/login', (req, res) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
-                err: {
-                    message: 'No existe un Usuario registrado con este email'
-                }
+                err
             });
         };
         if (!userDB) {
@@ -42,7 +40,8 @@ app.post('/login', (req, res) => {
         res.json({
             ok: true,
             user: userDB,
-            token
+            token,
+            expiresIn
         });
     });
 
