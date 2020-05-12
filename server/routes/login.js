@@ -13,7 +13,9 @@ app.post('/login', (req, res) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
-                err
+                err: {
+                    message: 'No existe un Usuario registrado con este email'
+                }
             });
         };
         if (!userDB) {
