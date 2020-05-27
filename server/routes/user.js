@@ -2,7 +2,10 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 const User = require('../models/user');
-const { checkToken, checkAdminRole } = require('../middlewares/authentication');
+const {
+    checkToken,
+    checkAdminRole
+} = require('../middlewares/authentication');
 
 const app = express();
 
@@ -44,7 +47,9 @@ app.get('/user', [checkToken, checkAdminRole], function(req, res) {
     let limit = req.query.limit || 5;
     limit = Number(limit);
 
-    User.find({ status: true }, 'name email role status google role img') /** como segundo parametro mandamos las exclusiones de los campos que queremos que aparezcan*/
+    User.find({
+            status: true
+        }, 'name email role status google role img') /** como segundo parametro mandamos las exclusiones de los campos que queremos que aparezcan*/
         .skip(since)
         .limit(limit)
         .exec((err, users) => {
@@ -55,7 +60,9 @@ app.get('/user', [checkToken, checkAdminRole], function(req, res) {
                 });
             }
 
-            User.count({ status: true }, (err, count) => {
+            User.count({
+                status: true
+            }, (err, count) => {
 
                 res.json({
                     ok: true,
@@ -68,83 +75,98 @@ app.get('/user', [checkToken, checkAdminRole], function(req, res) {
 });
 
 /*Obtengo un Usuario por su email */
-app.get('/user/:email', function(req, res) {
+app.route('/user/:email')
+    .get(function(req, res) {
 
-    const email = req.params.email;
-    let body = req.body
+        let email = req.params.email;
+        let body = req.body
 
-    User.findOne({ email }, body, { new: true }, (err, userDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
+        User.findOne({
+            email
+        }, body, {
+            new: true
+        }, (err, userDB) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            User.count({
+                status: true
+            }, (err, count) => {
+
+                res.json({
+                    ok: true,
+                    userDB,
+                    quantum: count
+                });
             });
-        }
-        User.count({ status: true }, (err, count) => {
-
-            res.json({
-                ok: true,
-                userDB,
-                quantum: count
-            });
-        });
-    });
-});
-
-/*Actualizamos un Usuario por su email*/
-app.put('/user/:email', function(req, res) {
-
-    const email = req.params.email;
-    let body = _.pick(req.body, ['name', 'email', 'img', 'role', 'homeAddress', 'city', 'phoneNumber', 'password', 'status']); //"pick" regresa una copia del objeto filtrando solo los valores que necesito (quiero)
-
-    User.findOneAndUpdate({ email }, body, { new: true, runValidators: true }, (err, userDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        };
-        res.json({
-            ok: true,
-            user: userDB
         });
     })
+    /*Actualizamos un Usuario por su email*/
+    .put(function(req, res) {
 
-});
+        const email = req.params.email;
+        let body = _.pick(req.body, ['name', 'email', 'img', 'role', 'homeAddress', 'city', 'phoneNumber', 'password', 'status']); //"pick" regresa una copia del objeto filtrando solo los valores que necesito (quiero)
 
-/**Eliminamos (Cambiamos de estado) un Usuario por su email */
-app.delete('/user/:email', function(req, res) {
+        User.findOneAndUpdate({
+            email
+        }, body, {
+            new: true,
+            runValidators: true
+        }, (err, userDB) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            };
+            res.json({
+                ok: true,
+                user: userDB
+            });
+        })
 
-    const email = req.params.email;
-    const changeStatus = {
+    })
+    /**Eliminamos (Cambiamos de estado) un Usuario por su email */
+    .delete(function(req, res) {
+
+        const email = req.params.email;
+        const changeStatus = {
             status: false
         }
-        //User.findOneAndRemove({ email }, { new: true }, (err, deleteUser) => { /** Con esta Linea eliminamos el registro de la BD */
-    User.findOneAndUpdate({ email }, changeStatus, { new: true }, (err, deleteUser) => { /** Acá cambiamos el estado del registro en la BD */
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        };
+        User.findOneAndRemove({
+            email
+        }, {
+            new: true
+        }, (err, deleteUser) => {
+            /** Con esta Linea eliminamos el registro de la BD */
+            // User.findOneAndUpdate({ email }, changeStatus, { new: true }, (err, deleteUser) => { /** Acá cambiamos el estado del registro en la BD */
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            };
 
-        if (!deleteUser) {
-            return res.status(400).json({
-                ok: false,
-                err: {
-                    message: 'User Not Found'
-                }
+            if (!deleteUser) {
+                return res.status(400).json({
+                    ok: false,
+                    err: {
+                        message: 'User Not Found'
+                    }
 
+                });
+            }
+            res.json({
+                ok: true,
+                message: 'User deleted correctly',
+                user: deleteUser
             });
-        }
-        res.json({
-            ok: true,
-            message: 'User deleted correctly',
-            user: deleteUser
         });
-    });
 
-});
+    });
 
 
 module.exports = app;

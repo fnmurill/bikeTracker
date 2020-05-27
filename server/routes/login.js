@@ -40,8 +40,7 @@ app.post('/login', (req, res) => {
         res.json({
             ok: true,
             user: userDB,
-            token,
-            expiresIn
+            token
         });
     });
 
